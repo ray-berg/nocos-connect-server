@@ -51,7 +51,7 @@ class View {
             } else {
                 if (now >= this.action_time) {
                     if (this.is_edit_mode) {
-                        this.content = `# https://github.com/rustdesk/rustdesk-server#env-variables
+                        this.content = `# NOCOS-Connect Server environment variables
 RUST_LOG=info
 `;
                     }

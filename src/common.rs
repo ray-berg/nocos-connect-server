@@ -56,7 +56,7 @@ fn arg_name(name: &str) -> String {
 pub fn init_args(args: &str, name: &str, about: &str) {
     let matches = App::new(name)
         .version(crate::version::VERSION)
-        .author("Purslane Ltd. <info@rustdesk.com>")
+        .author("NOCOS <info@nocos.io>")
         .about(about)
         .args_from_usage(args)
         .get_matches();

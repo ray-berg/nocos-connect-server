@@ -1,7 +1,7 @@
 [package]
 name = "hbbs"
 version = "1.1.14"
-authors = ["rustdesk <info@rustdesk.com>"]
+authors = ["NOCOS <info@nocos.io>"]
 edition = "2021"
 build = "build.rs"
 default-run = "hbbs"
@@ -11,7 +11,7 @@ name = "hbbr"
 path = "src/hbbr.rs"
 
 [[bin]]
-name = "rustdesk-utils"
+name = "nocos-connect-utils"
 path = "src/utils.rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
