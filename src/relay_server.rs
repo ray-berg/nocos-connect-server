@@ -427,9 +427,29 @@ async fn make_pair_(stream: impl StreamTrait, addr: SocketAddr, key: &str, limit
     if let Ok(Some(Ok(bytes))) = timeout(30_000, stream.recv()).await {
         if let Ok(msg_in) = RendezvousMessage::parse_from_bytes(&bytes) {
             if let Some(rendezvous_message::Union::RequestRelay(rf)) = msg_in.union {
-                if !key.is_empty() && rf.licence_key != key {
-                    log::warn!("Relay authentication failed from {} - invalid key", addr);
-                    return;
+                // NOCOS Connect path: if the licence_key looks like a JWT,
+                // validate it against the NOCOS signing key. On valid,
+                // proceed with the bridge setup. On NotAJwt/NotConfigured,
+                // fall through to the stock key-equality check so stock
+                // clients still work.
+                match crate::nocos_jwt::verify(&rf.licence_key) {
+                    Ok(claims) => {
+                        log::info!(
+                            "NOCOS Connect relay session {} accepted from {}",
+                            claims.sid, addr
+                        );
+                    }
+                    Err(crate::nocos_jwt::NocosJwtError::NotAJwt)
+                    | Err(crate::nocos_jwt::NocosJwtError::NotConfigured) => {
+                        if !key.is_empty() && rf.licence_key != key {
+                            log::warn!("Relay authentication failed from {} - invalid key", addr);
+                            return;
+                        }
+                    }
+                    Err(e) => {
+                        log::warn!("NOCOS JWT rejected from {}: {:?}", addr, e);
+                        return;
+                    }
                 }
                 if !rf.uuid.is_empty() {
                     let mut peer = PEERS.lock().await.remove(&rf.uuid);
