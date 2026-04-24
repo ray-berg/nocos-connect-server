@@ -19,6 +19,7 @@ use std::collections::HashMap;
 use std::sync::Mutex;
 use std::time::{Duration, Instant};
 
+use hbb_common::log;
 use jsonwebtoken::{decode, Algorithm, DecodingKey, Validation};
 use once_cell::sync::Lazy;
 use serde::Deserialize;
@@ -182,12 +183,12 @@ mod tests {
     use std::time::{SystemTime, UNIX_EPOCH};
 
     // Fixed test keypair — OK to ship since it's only used inside
-    // #[cfg(test)]. Generate-replace freely.
+    // #[cfg(test)]. Generated with cryptography / Ed25519PrivateKey.
     const TEST_PRIV_PEM: &str = "-----BEGIN PRIVATE KEY-----\n\
-MC4CAQAwBQYDK2VwBCIEIKKRBwmXX1qBpVaUHcjKkHkPHnRSuKqcWJ2Qq27oHi8f\n\
+MC4CAQAwBQYDK2VwBCIEIB4ujL8Dxrr2iyFcfE7qaZ7QgHDzrAicCx2oAunrs6Vp\n\
 -----END PRIVATE KEY-----";
     const TEST_PUB_PEM: &str = "-----BEGIN PUBLIC KEY-----\n\
-MCowBQYDK2VwAyEAHYPhE9S3qM2bNDWrgF0N0NcEy3GbsP3RCRp4rDaH8hA=\n\
+MCowBQYDK2VwAyEAThfmOA630a0YooQauDOWGsgZfcL1UWWgmxLOB/OtADg=\n\
 -----END PUBLIC KEY-----";
 
     #[derive(Serialize)]
