@@ -1,5 +1,6 @@
 use clap::App;
 mod common;
+mod nocos_jwt;
 mod relay_server;
 use flexi_logger::*;
 use hbb_common::{config::RELAY_PORT, ResultType};
